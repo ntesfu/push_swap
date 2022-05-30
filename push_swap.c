@@ -21,16 +21,23 @@ void	stk_rotate(int stk[], t_stk_ptr *ptr, int freq)
 		int i = 0;
 		int h = ptr->high_a;
 		while (i < h)
-		{
-			
+		{		
 			swap(stk, i++ , h);
 		}
 	}
 }
 
-void	stk_rotate_rev(int stk[])
+void	stk_rotate_rev(int stk[], t_stk_ptr *ptr, int freq)
 {
-	
+	while (freq--)
+	{
+		int i = 0;
+		int h = ptr->high_a;
+		while (i < h)
+		{		
+			swap(stk, i , h--);
+		}
+	}
 }
 
 int partition(int stk_a[], int stk_b[], t_stk_ptr *ptr, t_stk_flg *flg)
@@ -105,7 +112,7 @@ int main(int argc, char **argv)
 	ptr->high_b = 0;
 	flg->stk_flag = 0;
 	printArray(stk_a, 8);
-	stk_rotate(stk_a, ptr, 2);
-	//quickSort(stk_a, stk_b, ptr, flg);
+	//stk_rotate_rev(stk_a, ptr, 2);
+	quickSort(stk_a, stk_b, ptr, flg);
 	printArray(stk_a, 8);
 }
