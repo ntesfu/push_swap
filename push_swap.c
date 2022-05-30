@@ -8,14 +8,24 @@ void swap(int arr[], int i, int j)
     arr[j] = temp;
 }
 
-void	stk_push(int stk_a[], int stk_b[], t_stk_ptr *ptr)
+void	stk_push(int num, int stk_a[], t_stk_ptr *ptr, t_stk_flg *flg)
 {
-
+	stk_a[ptr->high_b] = num;
+	ptr->high_b++;
 }
 
-void	stk_rotate(int stk[])
+void	stk_rotate(int stk[], t_stk_ptr *ptr, int freq)
 {
-
+	while (freq--)
+	{
+		int i = 0;
+		int h = ptr->high_a;
+		while (i < h)
+		{
+			
+			swap(stk, i++ , h);
+		}
+	}
 }
 
 void	stk_rotate_rev(int stk[])
@@ -26,22 +36,32 @@ void	stk_rotate_rev(int stk[])
 int partition(int stk_a[], int stk_b[], t_stk_ptr *ptr, t_stk_flg *flg)
 {  
     int pivot = stk_a[ptr->high_a];
-	stk_rotate();
+	stk_rotate(stk_a, ptr, 1);
     int i = (ptr->low_a - 1);
-    for(int j = low; j <= high - 1; j++)
-    {    
-      // If current element is smaller
-      // than the pivot
-      if (arr[j] < pivot)
-      {      
-        // Increment index of
-        // smaller element
-            i++;
-            swap(arr, i, j);
-       }
-    }
-    swap(arr, i + 1, high);
-    return (i + 1);
+	int j = ptr->high_a;
+	while (j >= i)
+	{
+		if (stk_a[j] <= pivot)
+			stk_push(stk_a[j], stk_b, ptr, flg);
+		else
+			stk_rotate(stk_a, ptr, 1);
+	}
+
+    // for(int j = ptr->low_a; j <= ptr->high_a - 1; j++)
+    // {    
+    //   // If current element is smaller
+    //   // than the pivot
+    //   if (arr[j] < pivot)
+    //   {      
+    //     // Increment index of
+    //     // smaller element
+    //         i++;
+    //         swap(arr, i, j);
+    //    }
+    // }
+    // swap(arr, i + 1, high);
+    // return (i + 1);
+	return j;
 }
 
 
@@ -64,9 +84,9 @@ void	quickSort(int stk_a[], int stk_b[], t_stk_ptr *ptr, t_stk_flg *flg)
 
 void printArray(int arr[], int size)
 {
-    for(int i = 0; i < size; i++)
-      printf("%d ", arr[i]);    
-      printf("\n");
+	for(int i = 0; i < size; i++)
+		printf("%d ", arr[i]);    
+	printf("\n");
 }
 
 int main(int argc, char **argv)
@@ -85,6 +105,7 @@ int main(int argc, char **argv)
 	ptr->high_b = 0;
 	flg->stk_flag = 0;
 	printArray(stk_a, 8);
-	quickSort(stk_a, stk_b, ptr, flg);
+	stk_rotate(stk_a, ptr, 2);
+	//quickSort(stk_a, stk_b, ptr, flg);
 	printArray(stk_a, 8);
 }
