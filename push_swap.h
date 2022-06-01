@@ -8,6 +8,8 @@ typedef struct stack_ptr
 	int	high_a;
 	int	low_b;
 	int	high_b;
+	int pa_a;
+	int pa_b;
 } t_stk_ptr;
 
 typedef struct stack_flag
