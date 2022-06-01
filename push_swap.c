@@ -46,7 +46,7 @@ int partition(int stk_a[], int stk_b[], t_stk_ptr *ptr, t_stk_flg *flg)
 	stk_rotate(stk_a, ptr, 1);
     int i = (ptr->low_a - 1);
 	int j = ptr->high_a;
-	while (j >= i)
+	while (j >= i) //here I am writing from vim
 	{
 		if (stk_a[j] <= pivot)
 			stk_push(stk_a[j], stk_b, ptr, flg);
@@ -74,18 +74,26 @@ int partition(int stk_a[], int stk_b[], t_stk_ptr *ptr, t_stk_flg *flg)
 
 void	quickSort(int stk_a[], int stk_b[], t_stk_ptr *ptr, t_stk_flg *flg)
 {
-	t_stk_ptr *c_ptr;
+	t_stk_ptr	*c_ptr;
+	int			tmp_flg;
 
 	if (ptr->low_a < ptr->high_a)
 	{
 		c_ptr = (t_stk_ptr *)malloc(sizeof(t_stk_ptr));
+		tmp_flg = flg->stk_flag;
 		int pi = partition(stk_a, stk_b, ptr, flg);
 		c_ptr->low_a = ptr->low_b;
 		c_ptr->high_a = ptr->high_b;
 		c_ptr->low_b = ptr->low_a;
-		c_ptr->high_b = ptr->high_a;		
+		c_ptr->high_b = ptr->high_a;
+		if (tmp_flg == 0)
+			flg->stk_flag = 1;
+		else
+			flg->stk_flag = 0;
 		quickSort(stk_b, stk_a, c_ptr, flg);
+		flg->stk_flag = tmp_flg;
 		quickSort(stk_a, stk_b, c_ptr, flg);
+		
 	}
 }
 
