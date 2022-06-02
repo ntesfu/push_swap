@@ -13,22 +13,22 @@ void printArray(int arr[], int size)
 {
 	for(int i = 0; i < size; i++)
 		printf("%d ", arr[i]);    
-	printf("hello\n");
+	printf("h\n");
 }
 
-void	stk_push(int num, int stk_a[], t_stk_ptr *ptr, t_stk_flg *flg)
+void	stk_push(int stk_a[], int stk_b[], t_stk_ptr *ptr, t_stk_flg *flg)
 {	
 	if (flg->stk_flag == 0)
 	{
-		stk_a[ptr->high_b + 1] = num;
+		stk_b[ptr->high_b + 1] = stk_a[ptr->high_a];
 		stk_a[ptr->high_a] = 0;
-		ptr->high_b++;
-		ptr->high_a--;
+		ptr->high_b = ptr->high_b + 1;
+		ptr->high_a = ptr->high_a - 1;
 	}
 	else
 	{
-		stk_a[ptr->high_a + 1] = num;
-		stk_a[ptr->high_b] = 0;
+		stk_a[ptr->high_a + 1] = stk_b[ptr->high_b];
+		stk_b[ptr->high_b] = 0;
 		ptr->high_b--;
 		ptr->high_a++;
 	}
@@ -46,7 +46,6 @@ void	stk_rotate(int stk[], t_stk_ptr *ptr, t_stk_flg *flg, int freq)
 			h = ptr->high_b;		
 		while (i < h)
 			swap(stk, i++ , h);
-		h = ptr->high_a++;
 	}
 }
 
@@ -74,14 +73,17 @@ int	partition(int stk_a[], int stk_b[], t_stk_ptr *ptr, t_stk_flg *flg)
 	int	rtt = 0;
 	int pivot = stk_a[ptr->high_a];
 	stk_rotate(stk_a, ptr, flg, 1);
-	int low_num = stk_a[(ptr->low_a - 1)];
+	int low_num = stk_a[(ptr->low_a + 1)];
 	int j = ptr->high_a;
 	while (1) //here I am writing from vim
 	{
-		//ft_putstr_fd("look2\n",1);
-		if (stk_a[j] <= pivot)
+		printf("%d:", low_num);
+		ft_putstr_fd("look2\n",1);
+		printArray(stk_a, ptr->high_a + 1);
+		printArray(stk_b, ptr->high_b + 1);
+		if (stk_a[ptr->high_a] <= pivot)
 		{
-			stk_push(stk_a[j], stk_b, ptr, flg);
+			stk_push(stk_a, stk_b, ptr, flg);
 			psh++;
 		}
 		else
@@ -89,9 +91,11 @@ int	partition(int stk_a[], int stk_b[], t_stk_ptr *ptr, t_stk_flg *flg)
 			stk_rotate(stk_a, ptr, flg, 1);
 			rtt++;
 		}
-		if (stk_a[j] == low_num)
+		if (stk_a[ptr->high_a] == pivot)
 			break;
+		ft_putstr_fd("***\n",1);
 		printArray(stk_a, ptr->high_a + 1);
+		printArray(stk_b, ptr->high_b + 1);
 	}
 	stk_rotate_rev(stk_a, ptr, flg, rtt + 1);
 
@@ -169,8 +173,14 @@ int main(int argc, char **argv)
 	ptr->pa_a = ptr->high_a;
 	ptr->pa_b = ptr->high_b;
 	flg->stk_flag = 0;
-	printArray(stk_a, 8);
-	//stk_rotate_rev(stk_a, ptr, 2);
+	// ft_putstr_fd("***\n",1);
+	// printArray(stk_a, 8);
+	// printArray(stk_b, 8);
+	//stk_rotate(stk_a, ptr, flg, 2);
 	quickSort(stk_a, stk_b, ptr, flg);
-	printArray(stk_a, 8);
+	// stk_push(stk_a, stk_b, ptr, flg);
+	// stk_push(stk_a, stk_b, ptr, flg);
+	ft_putstr_fd("Final RESULT***\n",1);
+	printArray(stk_a, ptr->high_a + 1);
+	printArray(stk_b, ptr->high_b + 1);
 }
